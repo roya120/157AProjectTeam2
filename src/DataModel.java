@@ -43,7 +43,7 @@ public class DataModel {
 		 temporaryKeyString = username;
 	 }
 	 
-	 public void privateData(String firstName, String lastName, String phoneNumber, String email) throws Exception {
+	 public void createPrivateData(String firstName, String lastName, String phoneNumber, String email) throws Exception {
 		 
 		 String insertSql = "INSERT INTO USER (USER_NAME, first_name, last_name, phone_number,email)"
        			+ "VALUES ('"+temporaryKeyString+"' , '"+firstName+"' , '"+lastName+"' , '"+phoneNumber+"' , '"+email+"'";
@@ -54,7 +54,7 @@ public class DataModel {
 		 
 	 }
 
-	public void address(String street, String city, int zipCode) throws Exception {
+	public void createAddress(String street, String city, int zipCode) throws Exception {
 		 
 		String insertSql = "INSERT INTO USER (street, city, zip_code)"
        			+ "VALUES ('"+street+"' , '"+city+"' , '"+zipCode+"'";
