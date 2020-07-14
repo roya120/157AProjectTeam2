@@ -29,6 +29,8 @@ public class Controller {
 		
 		model.createAddress(userInput.get(6), userInput.get(7), Integer.parseInt(userInput.get(8)));
 		
+		model.closeConnection();
+		
 		return true;
 	}
 	
