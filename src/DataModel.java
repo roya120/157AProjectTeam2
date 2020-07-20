@@ -113,7 +113,7 @@ public class DataModel {
 	 
 	 } 
 	 
-	 public void addEngine(int engine_id, int size, String fuel_type, int cylinder)
+	 public void addEngine(int engine_id, int size, String fuel_type, int cylinder) throws Exception
 	 {
 	 
 	 
@@ -125,7 +125,7 @@ public class DataModel {
     statement.execute(insertSql);
 	 }
 	 
-	 public void addMake(int make_id, String make, String model, String type, int powertrain_id, int year)
+	 public void addMake(int make_id, String make, String model, String type, int powertrain_id, int year) throws Exception
 	 {
 		 String insertSql = "INSERT INTO DEALERSHIP.make (make_id, make, model, type, powertrain_id, year) "
 	       			+ "VALUES (' "+make_id+"' , '"+make+"' , '"+model +"'" + type + "' , '" + powertrain_id
@@ -139,7 +139,7 @@ public class DataModel {
 	 }
 	 
 	 
-	 public void addPowertrain(int powertrain_id, String drive_type, String transmition)
+	 public void addPowertrain(int powertrain_id, String drive_type, String transmition) throws Exception
 	 {
 		 
 		 String insertSql = "INSERT INTO DEALERSHIP.powertrain (powertrain_id, drive_type, transmition) values "
@@ -154,7 +154,7 @@ public class DataModel {
 		 
 	 }
 	 
-	 public void addMakeHasPowertrain (int make_id, int powertrain_id) {
+	 public void addMakeHasPowertrain (int make_id, int powertrain_id) throws Exception {
 		 
 		 
 		 
@@ -167,7 +167,7 @@ public class DataModel {
 	 }
 	 
 	 
-	 public void addPowertrainHasEngine(int powertrain_id, int engine_id)
+	 public void addPowertrainHasEngine(int powertrain_id, int engine_id) throws exception 
 	 
 	 {
 		 String insertSql = "INSERT INTO DEALERSHIP.PowertrainHasEngine ((powertrain_id, engine_id) values "
@@ -176,9 +176,28 @@ public class DataModel {
 			
 		   statement.execute(insertSql);
 	 }
+	 
+	 
+	 public void sortvehicle(String orderby, String ascOrDesc) throws Exception
+	 {
+		 
+		 String insertSql = "SELECT * FROM DEALERSHIP.make order by " + orderby + " " + ascOrDesc;
+		 
+		 Statement statement = connection.createStatement();
+			
+		   statement.execute(insertSql);
+		   
+		 
 	 }
 	 
-	 
+	 // color and description 
+	 public void displayInfo(int make_id, String selection) throws Exception
+	 {
+		 String insertSql = "SELECT " + make_id + ", " + selection + " FROM DEALERSHIP.listing";
+		 Statement statement = connection.createStatement();
+		   statement.execute(insertSql);
+		   
+	 }
 	 
 	 
 	 
