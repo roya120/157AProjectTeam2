@@ -190,12 +190,15 @@ public class DataModel {
 		 
 	 }
 	 
-	 // color and description 
-	 public void displayInfo(int make_id, String selection) throws Exception
+	 // one int and one string, displays two things about a vehicle
+	 public void displayInfoString (int make_id, String selection, int num) throws Exception
 	 {
-		 String insertSql = "SELECT " + make_id + ", " + selection + " FROM DEALERSHIP.listing";
+		 String insertSql1 = "SELECT " + make_id + ", " + selection + ", " num + " FROM DEALERSHIP.listing";
+		 
+		 
+		 
 		 Statement statement = connection.createStatement();
-		   statement.execute(insertSql);
+		   statement.execute(insertSql1 );
 		   
 	 }
 	 
