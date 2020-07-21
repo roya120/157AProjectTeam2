@@ -86,7 +86,7 @@ public class DataModel {
 	 public void buyVehicle(int make_id) throws Exception
 	 {
 		 String insertSql = "DELETE FROM DEALERSHIP.make WHERE make_id = " + make_id +
-				 " Delete from DEALERSHIP.listing where make_id= " make_id;
+				 " Delete from DEALERSHIP.listing where make_id= " + make_id;
 		 
 		
 		 Statement statement = connection.createStatement();
@@ -97,7 +97,7 @@ public class DataModel {
 	 
 	 
 	
-	 public void addListing(int listing_id, int make_id, int mileage, String color, double price, String description)
+	 public void addListing(int listing_id, int make_id, int mileage, String color, double price, String description) throws Exception
 	 {
 	 
 	 
@@ -118,7 +118,7 @@ public class DataModel {
 	 
 	 
 	 String insertSql = "INSERT INTO DEALERSHIP.engine (engine_id, size, fuel_type, cylinders) values "
-    			+ "VALUES (' "+engine_id +"' , '"+size, + "' , '"  + fuel_type +"' , '"  + cylinder +" ");
+    			+ "VALUES (' " + engine_id + "' , '" + size + "' , '"  + fuel_type + "' , '"  + cylinder + "')";
 	 
     Statement statement = connection.createStatement();
     			
@@ -143,7 +143,7 @@ public class DataModel {
 	 {
 		 
 		 String insertSql = "INSERT INTO DEALERSHIP.powertrain (powertrain_id, drive_type, transmition) values "
-	       			+ "VALUES (' "+powertrain_id +"' , '"+drive_type, +"' , '"+transmition + " )";
+	       			+ "VALUES (' "+powertrain_id +"' , '"+drive_type +"' , '"+ transmition + "')";
 		 
 		 Statement statement = connection.createStatement();
 			
@@ -159,7 +159,7 @@ public class DataModel {
 		 
 		 
 		 String insertSql = "INSERT INTO DEALERSHIP.MakeHasPowertrain (make_id, powertrain_id) values "
-	       			+ "VALUES (' "+make_id +"' , '"+powertrain_id, + " )";
+	       			+ "VALUES (' "+make_id +"' , '"+powertrain_id + "')";
 		 
 		 Statement statement = connection.createStatement();
 			
@@ -167,11 +167,11 @@ public class DataModel {
 	 }
 	 
 	 
-	 public void addPowertrainHasEngine(int powertrain_id, int engine_id) throws exception 
+	 public void addPowertrainHasEngine(int powertrain_id, int engine_id) throws Exception
 	 
 	 {
 		 String insertSql = "INSERT INTO DEALERSHIP.PowertrainHasEngine ((powertrain_id, engine_id) values "
-	       			+ "VALUES (' "+powertrain_id +"' , '"+engine_id, + " )";
+	       			+ "VALUES (' "+powertrain_id +"' , '"+engine_id + "')";
 		 Statement statement = connection.createStatement();
 			
 		   statement.execute(insertSql);
