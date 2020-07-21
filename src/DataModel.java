@@ -191,7 +191,7 @@ public class DataModel {
 	 }
 	 
 	 // one int and one string, displays two things about a vehicle
-	 public void displayInfoString (int make_id, String selection, int num) throws Exception
+	 public void displayInfo (int make_id, String selection, int num) throws Exception
 	 {
 		 String insertSql1 = "SELECT " + make_id + ", " + selection + ", " num + " FROM DEALERSHIP.listing";
 		 
@@ -200,6 +200,14 @@ public class DataModel {
 		 Statement statement = connection.createStatement();
 		   statement.execute(insertSql1 );
 		   
+	 }
+	 //mileage or price
+	 public void updateListingDouble (int listing_id, int mileOrPrice, double value )
+	 {
+		 String insertSql1 = "PDATE DEALERSHIP.listing SET " + mileOrPrice  + " = " + value + " WHERE listing_id = "  + listing_id;
+		 Statement statement = connection.createStatement();
+		   statement.execute(insertSql1 );
+				 
 	 }
 	 
 	 
