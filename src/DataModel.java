@@ -201,7 +201,7 @@ public class DataModel {
 		   statement.execute(insertSql1 );
 		   
 	 }
-	 //mileage or prices
+	 //mileage or price
 	 public void updateListingDouble (int listing_id, int mileOrPrice, double value )
 	 {
 		 String insertSql1 = "UPDATE DEALERSHIP.listing SET " + mileOrPrice  + " = " + value + " WHERE listing_id = "  + listing_id;
