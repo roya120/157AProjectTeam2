@@ -278,7 +278,7 @@ public class DataModel {
 		  
 				 
 	 }
-	 
+
 	//color or description
 		 public void updateListingString (int listing_id, String descOrColor, String value )
 		 {
@@ -308,6 +308,8 @@ public class DataModel {
 		
 		 }
 	 
+	 
+	
 	 
 	
 	 
