@@ -259,17 +259,18 @@ public class DataModel {
 		 
 	 }
 	 
-	 // color and description 
-	 public void displayInfo(int make_id, String selection) throws Exception
+	 
+	 public void displayInfo(int listing_id) throws Exception
 	 {
-		 String insertSql = "SELECT " + make_id + ", " + selection + " FROM DEALERSHIP.listing";
+		 String insertSql = "SELECT *  FROM DEALERSHIP.listing WHERE listing.listing_id = " + listing_id;
+		
 		 Statement statement = connection.createStatement();
 		   statement.execute(insertSql);
 		   
 	 }
 	 
 	 //mileage or price
-	 public void updateListingDouble (int listing_id, int mileOrPrice, double value ) throws Exception
+	 public void updateListingDouble (int listing_id, String mileOrPrice, double value ) throws Exception
 	 {
 		 String insertSql1 = "UPDATE DEALERSHIP.listing SET " + mileOrPrice  + " = " + value + " WHERE listing_id = "  + listing_id;
 		 Statement statement = connection.createStatement();
@@ -289,6 +290,17 @@ public class DataModel {
 			 
 		 }
 	 
+		 // This update listing, updates every attributes
+		 public void updateListing(int listing_id, double mileage, String color, double price, String description )
+		 {
+			 String insertSql= "UPDATE DEALERSHIP.listing SET mileage = " + mileage + ", color = " +
+		  color + ", price = " + price + ", description = " description +
+					" WHERE listing_id= " + listing+id; 
+			 Statement statement = connection.createStatement();
+			   statement.execute(insertSql );
+		 }
+		 
+		 
 		 // delete a row in listing 
 		 public void removeListing(int listing_id) throws Exception
 		 {
