@@ -19,8 +19,8 @@ public class DataModel {
 	
 	String[] porsche = {"Boxster", "Cayenne", "Macan", "Panamera"};
 	String[] acura = {"ILX", "MDX", "RDX", "TLX", "TSX"};
-	String[] alfa-romeo = {"Giulia"};
-	String audi = {"A3 e-tron", "A3", "A4", "A5", "A6", "Q3", "Q5", "Q7", "S3", "S4", "S5", "TTS", "allroad"};
+	String[] alfa_romeo = {"Giulia"};
+	String[] audi = {"A3 e-tron", "A3", "A4", "A5", "A6", "Q3", "Q5", "Q7", "S3", "S4", "S5", "TTS", "allroad"};
 	String[] bmw = {"1 Series", "2 Series", "3 Series", "4 Series", "5 Series", "M3", "X1", "X3", "X4", "X5", "i3"};
 	String[] chevrolet = {"Bolt EV", "Camaro", "Covette", "Cruze Limited", "Cruze", "Equinox","Malibu Limited", "Malibu", "Silverado 1500",
 			"Sonic", "Spark EV", "Spark", "Tahoe", "Traverse", "Volt"};
@@ -35,7 +35,7 @@ public class DataModel {
 	String[] honda = {"Accord Hybrid", "Accord", "GR-V", "Civic Hybrid", "Civic Type R", "Civic", "Element", "Fit",
 			"HR-V", "Odyssey", "Pilot"};
 	
-	String hyundai = {"Accent", "Elantra GT", "Elantra Touring", "Elantra", "Genesis Coupe", "Genesis","Loniq Hybrid",
+	String[] hyundai = {"Accent", "Elantra GT", "Elantra Touring", "Elantra", "Genesis Coupe", "Genesis","Loniq Hybrid",
 			"Santa Fe Sport", "Santa Fe", "Sonata Hybrid", "Sonata Plug-In Hybrid","Sonata","Tucson","Veracruz"};
 	
 	String[] infinity = {"Q50", "QX60", "QX80"};
@@ -46,7 +46,7 @@ public class DataModel {
 	
 	String[] kia = {"Forte", "Niro", "Optima Hybrid", "Optimia", "Sorento", "Soul"};
 	
-	String[] land-rover = {"Discovery Sport", "Range Rover Evoque", "Range Rover Velar"}; 
+	String[] land_rover = {"Discovery Sport", "Range Rover Evoque", "Range Rover Velar"};
 	String[] lexux = {"CT 200h", "ES 300h", "ES 350", "ES", "GX 460", "is 200t", "is 250", "is 350", "LS 460",
 			"NX 300h", "RX 350", "RX 400h", "RX 450h", "RX"};
 	
@@ -56,7 +56,7 @@ public class DataModel {
 	
 	String[] mazda= {"CX-3", "CX-5","CX-9", "MX-5 Miata RF", "MX-5 Miata", "Mazda2", "Mazda3", "Mazda5", "Mazda6"};
 	
-	String[] mercedes-benz = {"AMG C 43", "AMG E 63", "C 250", "CS 300", "C 63", "CLA 250", "E 350", "GL 450",
+	String[] mercedes_benz = {"AMG C 43", "AMG E 63", "C 250", "CS 300", "C 63", "CLA 250", "E 350", "GL 450",
 			"GL 550", "GLA 250", "GLC 300", "GLE 350", "GLK 350", "GLS 450"};
 	String[] mini = {"Cooper Countryman", "Cooper", "Countryman", "Hardtop"};
 	
@@ -67,7 +67,7 @@ public class DataModel {
 	String[] scion = {"iA", "xB", "xD"};
 	
 	String[] smart = {"fortwo"};
-	String[] subaro = {"BRZ", "Crosstrek", "Forester", "Impreza WRX", "Impreza", "Lexacy", "Outback", 
+	String[] subaru = {"BRZ", "Crosstrek", "Forester", "Impreza WRX", "Impreza", "Lexacy", "Outback",
 	"WRX STI", "WRX", "XV Crosstrek"};		
 	
 	
@@ -76,7 +76,7 @@ public class DataModel {
 	String[] toyota = {"4Runner", "Avalon Hybird", "Camry Hybrid", "Camry", "Corolla", "Highlander", 
 			"Prius Plug-in", "Prius Prime", "Prius C", "Prius V", "Prius", "RAV4 Hybrid", "RAV4", "Sienna", "Tacoma", "Yaris"};
 	
-	String[] volkswagen = {"Beetle", "CC", "GTI", "Golf Alltrack", "Golf GTI", "Golf R", "Golf","Jetta SportWagen"
+	String[] volkswagen = {"Beetle", "CC", "GTI", "Golf Alltrack", "Golf GTI", "Golf R", "Golf","Jetta SportWagen",
 	          "Jetta", "Passat", "Tiguan", "Touareg", "e-Golf"};		
 	String[] volvo = {"S60", "V60 Cross Country", "V60", "XC60"};
 	
@@ -269,7 +269,7 @@ public class DataModel {
 	 }
 	 
 	 //mileage or price
-	 public void updateListingDouble (int listing_id, int mileOrPrice, double value )
+	 public void updateListingDouble (int listing_id, int mileOrPrice, double value ) throws Exception
 	 {
 		 String insertSql1 = "UPDATE DEALERSHIP.listing SET " + mileOrPrice  + " = " + value + " WHERE listing_id = "  + listing_id;
 		 Statement statement = connection.createStatement();
@@ -280,7 +280,7 @@ public class DataModel {
 	 }
 
 	//color or description
-		 public void updateListingString (int listing_id, String descOrColor, String value )
+		 public void updateListingString (int listing_id, String descOrColor, String value ) throws Exception
 		 {
 			 
 			 String insertSql = "UPDATE DEALERSHIP.listing SET " + descOrColor  + " = " + value + " WHERE listing_id = "  + listing_id;
@@ -290,7 +290,7 @@ public class DataModel {
 		 }
 	 
 		 // delete a row in listing 
-		 public void removeListing(int listing_id)
+		 public void removeListing(int listing_id) throws Exception
 		 {
 			 String insertSql = "DELETE FROM DEALERSHIP.listing WEHRE listing_id = "   + listing_id; 
 			 Statement statement = connection.createStatement();
@@ -299,7 +299,7 @@ public class DataModel {
 		
 		 }
 		 
-		 public void removeMake(int make_id)
+		 public void removeMake(int make_id) throws Exception
 		 {
 			 String insertSql = "DELETE FROM DEALERSHIP.make WEHRE make_id = "   + make_id; 
 			 Statement statement = connection.createStatement();
