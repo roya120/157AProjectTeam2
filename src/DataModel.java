@@ -365,9 +365,13 @@ public class DataModel {
 	 }
 	 
 	 //mileage or price
+<<<<<<< HEAD
+	 public void updateListingDouble (int listing_id, String mileOrPrice, double value ) throws Exception
+=======
 
 	 public void updateListingDouble (int listing_id, String mileOrPrice, double value ) throws Exception
 
+>>>>>>> branch 'master' of https://github.com/roya120/157AProjectTeam2.git
 	 {
 		 String insertSql1 = "UPDATE DEALERSHIP.listing SET " + mileOrPrice  + " = " + value + " WHERE listing_id = "  + listing_id;
 		 Statement statement = connection.createStatement();
@@ -388,10 +392,18 @@ public class DataModel {
 		 }
 	 
 		 // This update listing, updates every attributes
+<<<<<<< HEAD
+		 public void updateListing(int listing_id, double mileage, String color, double price, String description )
+		 {
+			 String insertSql= "UPDATE DEALERSHIP.listing SET mileage = " + mileage + ", color = " +
+		  color + ", price = " + price + ", description = " description +
+					" WHERE listing_id= " + listing+id; 
+=======
 		 public void updateListing(int listing_id, double mileage, String color, double price, String description ) throws Exception
 		 {
 			 String insertSql= "UPDATE DEALERSHIP.listing SET mileage = " + mileage + ", color = " +
 		  color + ", price = " + price + ", description = " + description + " WHERE listing_id= " + listing_id;
+>>>>>>> branch 'master' of https://github.com/roya120/157AProjectTeam2.git
 			 Statement statement = connection.createStatement();
 			   statement.execute(insertSql );
 		 }
