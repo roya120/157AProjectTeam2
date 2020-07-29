@@ -2,6 +2,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.*;
 
 public class DataModel {
 	
@@ -122,7 +123,7 @@ public class DataModel {
 		statement.execute(insertSql);
 		 
 	 }
-
+/*
 	public void createAddress(String street, String city, int zipCode) throws Exception {
 		 
 		String insertSql = "INSERT INTO USER (street, city, zip_code)"
@@ -132,6 +133,21 @@ public class DataModel {
 		
 		statement.execute(insertSql);
 	}
+	*/
+	 
+	 public void createAddress(String address, String city, int zipCode) throws Exception
+	 {
+		 
+			String insertSql = "INSERT INTO DEALERSHIP.private_data (address, city, zip)"
+	       			+ "VALUES ('"+address+"' , '"+city+"' , '"+zipCode+"'";
+
+			Statement statement = connection.createStatement();
+			
+			statement.execute(insertSql);
+		 
+	 }
+
+
 	 
 	 public void closeConnection() throws Exception {
 
@@ -140,11 +156,67 @@ public class DataModel {
 		connection.close();
 		 
 	 }
-	 
-	 
-	 public void searchVehicle(String searchBy) throws Exception
+
+	 HashMap<String, String> values = new HashMap<String, String>();
+
+	 public void setValues() {
+		//Assumption: all the values are set in the hashmap with this fn
+		 // to add the listing
+	 }
+
+	 public void createFullListing(HashMap<String,String> values) throws Exception
 	 {
-		 String insertSql = "SELECT * FROM DEALERSHIP.make WHERE make LIKE " + searchBy; 
+	 	//Get each of the largest id numbers and then increment if we have to add the values.
+	 	String getIDs = "SELECT MAX(make_id), MAX(powertrain_id), MAX(engine_id), MAX(listing_id) FROM listing, powertrainhasengine";
+	 	Statement statement = connection.createStatement();
+	 	ResultSet ids = statement.executeQuery(getIDs);
+	 	ids.first();
+	 	int newListing_id = ids.getInt("MAX(listing_id)") + 1;
+	 	int newMake_id = ids.getInt("MAX(make_id)") + 1;
+	 	int newPowerTrain_id = ids.getInt("MAX(powertrain_id)") + 1;
+		int newEngine_id = ids.getInt("MAX(engine_id)") + 1;
+		ids.close();
+
+		//Quickly add the new listing id to the HashTable
+		values.put("listing_id", Integer.toString(newListing_id));
+
+		//Now check if the entered data exists.
+		boolean makeExists = true, powertrainExists = true, engineExists = true;
+
+		String makeExistsString = "SELECT make_id FROM make WHERE make = " + values.get("make") + " AND model ="
+				+ values.get("model") + " AND type = " + values.get("type") + " AND year = " + values.get("year");
+		ResultSet makeRS = statement.executeQuery(makeExistsString);
+		if(!makeRS.next()) {
+			makeExists = false; //insert if does not exist
+		}
+		makeRS.close();
+
+		String powerTrainExistsString = "SELECT powertrain_id FROM powertrain WHERE drive_type = "
+				+ values.get("drive_type") + " AND transmition = " + values.get("transmition");
+		ResultSet powertrainRS = statement.executeQuery(powerTrainExistsString);
+		if(!powertrainRS.next()){
+			powertrainExists = false;
+		}
+		powertrainRS.close();
+
+		String engineExistsString = "SELECT engine_id FROM engine WHERE size = " + values.get("size")
+				+ " AND fuel_type = " + values.get("fuel_type") + " AND cylinders = " + values.get("cylinders");
+		ResultSet engineRS = statement.executeQuery(engineExistsString);
+		if(!engineRS.next()){
+			engineExists = false;
+		}
+		engineRS.close();
+
+
+	 	//use fns: addListing, addengine, addmake, addpowertrain, addmakehaspowertrain, addpowertrainhasengine
+		addListing(Integer.parseInt(values.get("listing_id")),Integer.parseInt(values.get("make_id")),Integer.parseInt(values.get("mileage")),values.get("color"),Double.parseDouble(values.get("price")),values.get("description"));
+
+	 }
+	 
+	 // Search in make table by the make
+	 public void searchByMake(String make) throws Exception
+	 {
+		 String insertSql = "SELECT * FROM DEALERSHIP.make WHERE make LIKE " + make; 
 	       			
 		 Statement statement = connection.createStatement();
 			
@@ -152,11 +224,34 @@ public class DataModel {
 		  
 	 }
 	 
-	 public void buyVehicle(int make_id) throws Exception
+	 //Search model 
+	 public void searchModel(String model) throws Exception
 	 {
-		 String insertSql = "DELETE FROM DEALERSHIP.make WHERE make_id = " + make_id +
-				 " Delete from DEALERSHIP.listing where make_id= " + make_id;
-		 
+		 String insertSql = "SELECT * FROM DEALERSHIP.make WHERE model LIKE " + model; 
+	       			
+		 Statement statement = connection.createStatement();
+			
+			statement.execute(insertSql);
+		  
+	 }
+
+	 // search for specific car by the make_id 
+	 
+	 public void searchVehicle(int make_id) throws Exception
+	 {
+		 String insertSql = "SELECT * FROM DEALERSHIP.make WHERE make_id = " + make_id; 
+	       			
+		 Statement statement = connection.createStatement();
+			
+			statement.execute(insertSql);
+		  
+	 }
+	 
+	 
+	 
+	 public void buyVehicle(int listing_id) throws Exception
+	 {
+		 String insertSql = " Delete from DEALERSHIP.listing where listing_id= " + listing_id;
 		
 		 Statement statement = connection.createStatement();
 			
@@ -270,7 +365,13 @@ public class DataModel {
 	 }
 	 
 	 //mileage or price
+<<<<<<< HEAD
 	 public void updateListingDouble (int listing_id, String mileOrPrice, double value ) throws Exception
+=======
+
+	 public void updateListingDouble (int listing_id, String mileOrPrice, double value ) throws Exception
+
+>>>>>>> branch 'master' of https://github.com/roya120/157AProjectTeam2.git
 	 {
 		 String insertSql1 = "UPDATE DEALERSHIP.listing SET " + mileOrPrice  + " = " + value + " WHERE listing_id = "  + listing_id;
 		 Statement statement = connection.createStatement();
@@ -291,11 +392,18 @@ public class DataModel {
 		 }
 	 
 		 // This update listing, updates every attributes
+<<<<<<< HEAD
 		 public void updateListing(int listing_id, double mileage, String color, double price, String description )
 		 {
 			 String insertSql= "UPDATE DEALERSHIP.listing SET mileage = " + mileage + ", color = " +
 		  color + ", price = " + price + ", description = " description +
 					" WHERE listing_id= " + listing+id; 
+=======
+		 public void updateListing(int listing_id, double mileage, String color, double price, String description ) throws Exception
+		 {
+			 String insertSql= "UPDATE DEALERSHIP.listing SET mileage = " + mileage + ", color = " +
+		  color + ", price = " + price + ", description = " + description + " WHERE listing_id= " + listing_id;
+>>>>>>> branch 'master' of https://github.com/roya120/157AProjectTeam2.git
 			 Statement statement = connection.createStatement();
 			   statement.execute(insertSql );
 		 }
@@ -320,9 +428,5 @@ public class DataModel {
 		
 		 }
 	 
-	 
-	
-	 
-	
 	 
 }
