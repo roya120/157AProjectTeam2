@@ -159,9 +159,52 @@ public class DataModel {
 
 	 HashMap<String, String> values = new HashMap<String, String>();
 
-	 public void setValues() {
+	 public void setValues(HashMap<String,String> values) {
 		//Assumption: all the values are set in the hashmap with this fn
-		 // to add the listing
+		 // to add the listing and to search
+
+		 //clearout hashmap before entering data
+	 }
+
+	 public void searchMain(HashMap<String,String> values) throws Exception
+	 {
+	 	//This function will be used to search the entire database and return the information as strings.
+		 boolean makeExists = true, powertrainExists = true, engineExists = true;
+		 int makeID, powertrainID, engineID;
+
+		 String makeExistsString = "SELECT make_id FROM make WHERE make = " + values.get("make") + " AND model ="
+				 + values.get("model") + " AND type = " + values.get("type") + " AND year = " + values.get("year");
+		 ResultSet makeRS = statement.executeQuery(makeExistsString);
+		 if(!makeRS.next()) {
+			 makeExists = false; //insert if does not exist
+		 } else {
+			 makeID = makeRS.getInt("make_id");
+			 values.put("make_id", Integer.toString(makeID));
+		 }
+		 makeRS.close();
+
+		 String powerTrainExistsString = "SELECT powertrain_id FROM powertrain WHERE drive_type = "
+				 + values.get("drive_type") + " AND transmition = " + values.get("transmition");
+		 ResultSet powertrainRS = statement.executeQuery(powerTrainExistsString);
+		 if(!powertrainRS.next()){
+			 powertrainExists = false;
+		 } else {
+			 powertrainID = powertrainRS.getInt("powertrain_id");
+			 values.put("powertrain_id", Integer.toString(powertrainID));
+		 }
+		 powertrainRS.close();
+
+		 String engineExistsString = "SELECT engine_id FROM engine WHERE size = " + values.get("size")
+				 + " AND fuel_type = " + values.get("fuel_type") + " AND cylinders = " + values.get("cylinders");
+		 ResultSet engineRS = statement.executeQuery(engineExistsString);
+		 if(!engineRS.next()){
+			 engineExists = false;
+		 } else {
+			 engineID = engineRS.getInt("engine_id");
+			 values.put("engine_id", Integer.toString(engineID));
+		 }
+		 engineRS.close();
+
 	 }
 
 	 public void createFullListing(HashMap<String,String> values) throws Exception
@@ -177,17 +220,24 @@ public class DataModel {
 		int newEngine_id = ids.getInt("MAX(engine_id)") + 1;
 		ids.close();
 
-		//Quickly add the new listing id to the HashTable
+		//Quickly add the new ids to the HashTable
 		values.put("listing_id", Integer.toString(newListing_id));
+		 values.put("make_id", Integer.toString(newMake_id));
+		 values.put("powertrain_id", Integer.toString(newPowerTrain_id));
+		 values.put("engine_id", Integer.toString(newEngine_id));
 
 		//Now check if the entered data exists.
 		boolean makeExists = true, powertrainExists = true, engineExists = true;
+		int makeID, powertrainID, engineID;
 
 		String makeExistsString = "SELECT make_id FROM make WHERE make = " + values.get("make") + " AND model ="
 				+ values.get("model") + " AND type = " + values.get("type") + " AND year = " + values.get("year");
 		ResultSet makeRS = statement.executeQuery(makeExistsString);
 		if(!makeRS.next()) {
 			makeExists = false; //insert if does not exist
+		} else {
+			makeID = makeRS.getInt("make_id");
+			values.put("make_id", Integer.toString(makeID));
 		}
 		makeRS.close();
 
@@ -196,6 +246,9 @@ public class DataModel {
 		ResultSet powertrainRS = statement.executeQuery(powerTrainExistsString);
 		if(!powertrainRS.next()){
 			powertrainExists = false;
+		} else {
+			powertrainID = powertrainRS.getInt("powertrain_id");
+			values.put("powertrain_id", Integer.toString(powertrainID));
 		}
 		powertrainRS.close();
 
@@ -204,12 +257,56 @@ public class DataModel {
 		ResultSet engineRS = statement.executeQuery(engineExistsString);
 		if(!engineRS.next()){
 			engineExists = false;
+		} else {
+			engineID = engineRS.getInt("engine_id");
+			values.put("engine_id", Integer.toString(engineID));
 		}
 		engineRS.close();
 
+		//in table
+		 if(makeExists == true && powertrainExists == true && engineExists == true) {
+			 addListing(Integer.parseInt(values.get("listing_id")),Integer.parseInt(values.get("make_id")),
+					 Integer.parseInt(values.get("mileage")),values.get("color"),
+					 Double.parseDouble(values.get("price")),values.get("description"));
+		 }
+
+		 //not in table
+		 if(engineExists == false){
+		 	addEngine(newEngine_id,Integer.parseInt(values.get("size")),values.get("fuel_type"),
+					Integer.parseInt(values.get(" cylinder")));
+		 }
+		 if(powertrainExists == false){
+		 	addPowertrain(newPowerTrain_id,values.get("drive_type"),
+					values.get("transmition"));
+
+			if(makeExists == true) {
+				//if Make is true, powertrain is false
+				addMake(newMake_id, values.get("make"), values.get("model"), values.get("type"),
+						newPowerTrain_id, Integer.parseInt(values.get("year")));
+
+				addMakeHasPowertrain(newMake_id, newPowerTrain_id);
+
+				addListing(newListing_id,newMake_id,Integer.parseInt(values.get("mileage")),values.get("color"),
+						Double.parseDouble(values.get("price")),values.get("description"));
+			}
+
+		 }
+		 if(engineExists == false || powertrainExists == false) {
+		 	addPowertrainHasEngine(Integer.parseInt(values.get("powertrain_id")),
+					Integer.parseInt(values.get("engine_id")));
+		 }
+		 if(makeExists == false) {
+		 	//if make is false but powertrain is true
+		 	addMake(newMake_id,values.get("make"),values.get("model"),values.get("type"),
+					Integer.parseInt(values.get("powertrain_id")), Integer.parseInt(values.get("year")));
+
+		 	addMakeHasPowertrain(newMake_id,Integer.parseInt(values.get("powertrain_id")));
+
+		 	addListing(newListing_id,newMake_id,Integer.parseInt(values.get("mileage")),values.get("color"),
+					Double.parseDouble(values.get("price")),values.get("description"));
+		 }
 
 	 	//use fns: addListing, addengine, addmake, addpowertrain, addmakehaspowertrain, addpowertrainhasengine
-		addListing(Integer.parseInt(values.get("listing_id")),Integer.parseInt(values.get("make_id")),Integer.parseInt(values.get("mileage")),values.get("color"),Double.parseDouble(values.get("price")),values.get("description"));
 
 	 }
 	 
