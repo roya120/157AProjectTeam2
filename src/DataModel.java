@@ -460,46 +460,19 @@ public class DataModel {
 		   
 	 }
 	 
-	 //mileage or price
-<<<<<<< HEAD
-	 public void updateListingDouble (int listing_id, String mileOrPrice, double value ) throws Exception
-=======
+	 
 
-	 public void updateListingDouble (int listing_id, String mileOrPrice, double value ) throws Exception
-
->>>>>>> branch 'master' of https://github.com/roya120/157AProjectTeam2.git
-	 {
-		 String insertSql1 = "UPDATE DEALERSHIP.listing SET " + mileOrPrice  + " = " + value + " WHERE listing_id = "  + listing_id;
-		 Statement statement = connection.createStatement();
-		   statement.execute(insertSql1 );
-		   
-		  
-				 
-	 }
-
-	//color or description
-		 public void updateListingString (int listing_id, String descOrColor, String value ) throws Exception
-		 {
-			 
-			 String insertSql = "UPDATE DEALERSHIP.listing SET " + descOrColor  + " = " + value + " WHERE listing_id = "  + listing_id;
-			 Statement statement = connection.createStatement();
-			   statement.execute(insertSql );
-			 
-		 }
+	
 	 
 		 // This update listing, updates every attributes
-<<<<<<< HEAD
-		 public void updateListing(int listing_id, double mileage, String color, double price, String description )
-		 {
-			 String insertSql= "UPDATE DEALERSHIP.listing SET mileage = " + mileage + ", color = " +
-		  color + ", price = " + price + ", description = " description +
-					" WHERE listing_id= " + listing+id; 
-=======
+
+
 		 public void updateListing(int listing_id, double mileage, String color, double price, String description ) throws Exception
 		 {
-			 String insertSql= "UPDATE DEALERSHIP.listing SET mileage = " + mileage + ", color = " +
-		  color + ", price = " + price + ", description = " + description + " WHERE listing_id= " + listing_id;
->>>>>>> branch 'master' of https://github.com/roya120/157AProjectTeam2.git
+	    String insertSql= "UPDATE DEALERSHIP.listing SET mileage = " + mileage  + ", color = '"+ color + "', price = "
+			 + price + ", description = '"+ description +
+			 "' WHERE listing_id= " + listing_id;
+
 			 Statement statement = connection.createStatement();
 			   statement.execute(insertSql );
 		 }
@@ -508,7 +481,8 @@ public class DataModel {
 		 // delete a row in listing 
 		 public void removeListing(int listing_id) throws Exception
 		 {
-			 String insertSql = "DELETE FROM DEALERSHIP.listing WEHRE listing_id = "   + listing_id; 
+			 String insertSql = "DELETE FROM DEALERSHIP.listing where listing_id  =  " + listing_id;
+ 
 			 Statement statement = connection.createStatement();
 			   statement.execute(insertSql );
 			   
@@ -517,7 +491,7 @@ public class DataModel {
 		 
 		 public void removeMake(int make_id) throws Exception
 		 {
-			 String insertSql = "DELETE FROM DEALERSHIP.make WEHRE make_id = "   + make_id; 
+			 String insertSql = "DELETE FROM DEALERSHIP.make where make_id = "   + make_id; 
 			 Statement statement = connection.createStatement();
 			   statement.execute(insertSql );
 			   
