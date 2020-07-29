@@ -363,8 +363,4 @@ public class DataModel {
 		 }
 	 
 	 
-	
-	 
-	
-	 
 }
