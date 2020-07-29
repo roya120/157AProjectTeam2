@@ -103,7 +103,7 @@ public class DataModel {
 	 
 	 public void createUsername(String username, String password) throws Exception {
 		
-		 String insertSql = "INSERT INTO USER (USER_NAME, PASSWORD)"
+		 String insertSql = "INSERT INTO USER (user_name, password)"
 		          			+ "VALUES ('"+username+"' , '"+password+"')";
 		 
 		 Statement statement = connection.createStatement();
@@ -113,10 +113,11 @@ public class DataModel {
 		 temporaryKeyString = username;
 	 }
 	 
-	 public void createPrivateData(String firstName, String lastName, String phoneNumber, String email) throws Exception {
+	 public void createPrivateData(String email, String user_name, String firstName, String lastName, String phone, String address, String city, int zip) throws Exception {
 		 
-		 String insertSql = "INSERT INTO USER (USER_NAME, first_name, last_name, phone_number,email)"
-       			+ "VALUES ('"+temporaryKeyString+"' , '"+firstName+"' , '"+lastName+"' , '"+phoneNumber+"' , '"+email+"'";
+		 String insertSql = "INSERT INTO private_data (email, user_name, first_name, last_name, phone, address, city, zip)"
+       			+ "VALUES ('"+temporaryKeyString+ "', '" + email + "', '"+ user_name + "', '"
+       					+ firstName+"' , '"+lastName+"', '" + phone + "' , '"+ address +"' , '"+  city+"' , '"+zip +"')";
 
 		Statement statement = connection.createStatement();
 		
