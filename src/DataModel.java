@@ -249,7 +249,7 @@ public class DataModel {
 	 
 	 
 	 
-	 public void buyVehicle(int make_id) throws Exception
+	 public void buyVehicle(int listing_id) throws Exception
 	 {
 		 String insertSql = " Delete from DEALERSHIP.listing where listing_id= " + listing_id;
 		
@@ -388,11 +388,10 @@ public class DataModel {
 		 }
 	 
 		 // This update listing, updates every attributes
-		 public void updateListing(int listing_id, double mileage, String color, double price, String description )
+		 public void updateListing(int listing_id, double mileage, String color, double price, String description ) throws Exception
 		 {
 			 String insertSql= "UPDATE DEALERSHIP.listing SET mileage = " + mileage + ", color = " +
-		  color + ", price = " + price + ", description = " description +
-					" WHERE listing_id= " + listing+id; 
+		  color + ", price = " + price + ", description = " + description + " WHERE listing_id= " + listing_id;
 			 Statement statement = connection.createStatement();
 			   statement.execute(insertSql );
 		 }
