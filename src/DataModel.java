@@ -123,7 +123,7 @@ public class DataModel {
 		statement.execute(insertSql);
 		 
 	 }
-
+/*
 	public void createAddress(String street, String city, int zipCode) throws Exception {
 		 
 		String insertSql = "INSERT INTO USER (street, city, zip_code)"
@@ -133,6 +133,21 @@ public class DataModel {
 		
 		statement.execute(insertSql);
 	}
+	*/
+	 
+	 public void createAddress(String address, String city, int zipCode) throws Exception
+	 {
+		 
+			String insertSql = "INSERT INTO DEALERSHIP.private_data (address, city, zip)"
+	       			+ "VALUES ('"+address+"' , '"+city+"' , '"+zipCode+"'";
+
+			Statement statement = connection.createStatement();
+			
+			statement.execute(insertSql);
+		 
+	 }
+
+
 	 
 	 public void closeConnection() throws Exception {
 
@@ -198,10 +213,10 @@ public class DataModel {
 
 	 }
 	 
-	 
-	 public void searchVehicle(String searchBy) throws Exception
+	 // Search in make table by the make
+	 public void searchByMake(String make) throws Exception
 	 {
-		 String insertSql = "SELECT * FROM DEALERSHIP.make WHERE make LIKE " + searchBy; 
+		 String insertSql = "SELECT * FROM DEALERSHIP.make WHERE make LIKE " + make; 
 	       			
 		 Statement statement = connection.createStatement();
 			
@@ -209,7 +224,32 @@ public class DataModel {
 		  
 	 }
 	 
-	 public void buyVehicle(int listing_id) throws Exception
+	 //Search model 
+	 public void searchModel(String model) throws Exception
+	 {
+		 String insertSql = "SELECT * FROM DEALERSHIP.make WHERE model LIKE " + model; 
+	       			
+		 Statement statement = connection.createStatement();
+			
+			statement.execute(insertSql);
+		  
+	 }
+
+	 // search for specific car by the make_id 
+	 
+	 public void searchVehicle(int make_id) throws Exception
+	 {
+		 String insertSql = "SELECT * FROM DEALERSHIP.make WHERE make_id = " + make_id; 
+	       			
+		 Statement statement = connection.createStatement();
+			
+			statement.execute(insertSql);
+		  
+	 }
+	 
+	 
+	 
+	 public void buyVehicle(int make_id) throws Exception
 	 {
 		 String insertSql = " Delete from DEALERSHIP.listing where listing_id= " + listing_id;
 		
@@ -314,17 +354,20 @@ public class DataModel {
 		 
 	 }
 	 
-	 // color and description 
-	 public void displayInfo(int make_id, String selection) throws Exception
+	 
+	 public void displayInfo(int listing_id) throws Exception
 	 {
-		 String insertSql = "SELECT " + make_id + ", " + selection + " FROM DEALERSHIP.listing";
+		 String insertSql = "SELECT *  FROM DEALERSHIP.listing WHERE listing.listing_id = " + listing_id;
+		
 		 Statement statement = connection.createStatement();
 		   statement.execute(insertSql);
 		   
 	 }
 	 
 	 //mileage or price
-	 public void updateListingDouble (int listing_id, int mileOrPrice, double value ) throws Exception
+
+	 public void updateListingDouble (int listing_id, String mileOrPrice, double value ) throws Exception
+
 	 {
 		 String insertSql1 = "UPDATE DEALERSHIP.listing SET " + mileOrPrice  + " = " + value + " WHERE listing_id = "  + listing_id;
 		 Statement statement = connection.createStatement();
@@ -344,6 +387,17 @@ public class DataModel {
 			 
 		 }
 	 
+		 // This update listing, updates every attributes
+		 public void updateListing(int listing_id, double mileage, String color, double price, String description )
+		 {
+			 String insertSql= "UPDATE DEALERSHIP.listing SET mileage = " + mileage + ", color = " +
+		  color + ", price = " + price + ", description = " description +
+					" WHERE listing_id= " + listing+id; 
+			 Statement statement = connection.createStatement();
+			   statement.execute(insertSql );
+		 }
+		 
+		 
 		 // delete a row in listing 
 		 public void removeListing(int listing_id) throws Exception
 		 {
@@ -363,9 +417,5 @@ public class DataModel {
 		
 		 }
 	 
-	 
-	
-	 
-	
 	 
 }
