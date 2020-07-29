@@ -103,7 +103,7 @@ public class DataModel {
 	 
 	 public void createUsername(String username, String password) throws Exception {
 		
-		 String insertSql = "INSERT INTO USER (user_name, password)"
+		 String insertSql = "INSERT INTO USER (USER_NAME, PASSWORD)"
 		          			+ "VALUES ('"+username+"' , '"+password+"')";
 		 
 		 Statement statement = connection.createStatement();
@@ -113,11 +113,10 @@ public class DataModel {
 		 temporaryKeyString = username;
 	 }
 	 
-	 public void createPrivateData(String email, String user_name, String firstName, String lastName, String phone, String address, String city, int zip) throws Exception {
+	 public void createPrivateData(String firstName, String lastName, String phoneNumber, String email) throws Exception {
 		 
-		 String insertSql = "INSERT INTO private_data (email, user_name, first_name, last_name, phone, address, city, zip)"
-       			+ "VALUES ('"+temporaryKeyString+ "', '" + email + "', '"+ user_name + "', '"
-       					+ firstName+"' , '"+lastName+"', '" + phone + "' , '"+ address +"' , '"+  city+"' , '"+zip +"')";
+		 String insertSql = "INSERT INTO USER (USER_NAME, first_name, last_name, phone_number,email)"
+       			+ "VALUES ('"+temporaryKeyString+"' , '"+firstName+"' , '"+lastName+"' , '"+phoneNumber+"' , '"+email+"'";
 
 		Statement statement = connection.createStatement();
 		
@@ -160,9 +159,52 @@ public class DataModel {
 
 	 HashMap<String, String> values = new HashMap<String, String>();
 
-	 public void setValues() {
+	 public void setValues(HashMap<String,String> values) {
 		//Assumption: all the values are set in the hashmap with this fn
-		 // to add the listing
+		 // to add the listing and to search
+
+		 //clearout hashmap before entering data
+	 }
+
+	 public void searchMain(HashMap<String,String> values) throws Exception
+	 {
+	 	//This function will be used to search the entire database and return the information as strings.
+		 boolean makeExists = true, powertrainExists = true, engineExists = true;
+		 int makeID, powertrainID, engineID;
+
+		 String makeExistsString = "SELECT make_id FROM make WHERE make = " + values.get("make") + " AND model ="
+				 + values.get("model") + " AND type = " + values.get("type") + " AND year = " + values.get("year");
+		 ResultSet makeRS = statement.executeQuery(makeExistsString);
+		 if(!makeRS.next()) {
+			 makeExists = false; //insert if does not exist
+		 } else {
+			 makeID = makeRS.getInt("make_id");
+			 values.put("make_id", Integer.toString(makeID));
+		 }
+		 makeRS.close();
+
+		 String powerTrainExistsString = "SELECT powertrain_id FROM powertrain WHERE drive_type = "
+				 + values.get("drive_type") + " AND transmition = " + values.get("transmition");
+		 ResultSet powertrainRS = statement.executeQuery(powerTrainExistsString);
+		 if(!powertrainRS.next()){
+			 powertrainExists = false;
+		 } else {
+			 powertrainID = powertrainRS.getInt("powertrain_id");
+			 values.put("powertrain_id", Integer.toString(powertrainID));
+		 }
+		 powertrainRS.close();
+
+		 String engineExistsString = "SELECT engine_id FROM engine WHERE size = " + values.get("size")
+				 + " AND fuel_type = " + values.get("fuel_type") + " AND cylinders = " + values.get("cylinders");
+		 ResultSet engineRS = statement.executeQuery(engineExistsString);
+		 if(!engineRS.next()){
+			 engineExists = false;
+		 } else {
+			 engineID = engineRS.getInt("engine_id");
+			 values.put("engine_id", Integer.toString(engineID));
+		 }
+		 engineRS.close();
+
 	 }
 
 	 public void createFullListing(HashMap<String,String> values) throws Exception
@@ -178,17 +220,24 @@ public class DataModel {
 		int newEngine_id = ids.getInt("MAX(engine_id)") + 1;
 		ids.close();
 
-		//Quickly add the new listing id to the HashTable
+		//Quickly add the new ids to the HashTable
 		values.put("listing_id", Integer.toString(newListing_id));
+		 values.put("make_id", Integer.toString(newMake_id));
+		 values.put("powertrain_id", Integer.toString(newPowerTrain_id));
+		 values.put("engine_id", Integer.toString(newEngine_id));
 
 		//Now check if the entered data exists.
 		boolean makeExists = true, powertrainExists = true, engineExists = true;
+		int makeID, powertrainID, engineID;
 
 		String makeExistsString = "SELECT make_id FROM make WHERE make = " + values.get("make") + " AND model ="
 				+ values.get("model") + " AND type = " + values.get("type") + " AND year = " + values.get("year");
 		ResultSet makeRS = statement.executeQuery(makeExistsString);
 		if(!makeRS.next()) {
 			makeExists = false; //insert if does not exist
+		} else {
+			makeID = makeRS.getInt("make_id");
+			values.put("make_id", Integer.toString(makeID));
 		}
 		makeRS.close();
 
@@ -197,6 +246,9 @@ public class DataModel {
 		ResultSet powertrainRS = statement.executeQuery(powerTrainExistsString);
 		if(!powertrainRS.next()){
 			powertrainExists = false;
+		} else {
+			powertrainID = powertrainRS.getInt("powertrain_id");
+			values.put("powertrain_id", Integer.toString(powertrainID));
 		}
 		powertrainRS.close();
 
@@ -205,19 +257,63 @@ public class DataModel {
 		ResultSet engineRS = statement.executeQuery(engineExistsString);
 		if(!engineRS.next()){
 			engineExists = false;
+		} else {
+			engineID = engineRS.getInt("engine_id");
+			values.put("engine_id", Integer.toString(engineID));
 		}
 		engineRS.close();
 
+		//in table
+		 if(makeExists == true && powertrainExists == true && engineExists == true) {
+			 addListing(Integer.parseInt(values.get("listing_id")),Integer.parseInt(values.get("make_id")),
+					 Integer.parseInt(values.get("mileage")),values.get("color"),
+					 Double.parseDouble(values.get("price")),values.get("description"));
+		 }
+
+		 //not in table
+		 if(engineExists == false){
+		 	addEngine(newEngine_id,Integer.parseInt(values.get("size")),values.get("fuel_type"),
+					Integer.parseInt(values.get(" cylinder")));
+		 }
+		 if(powertrainExists == false){
+		 	addPowertrain(newPowerTrain_id,values.get("drive_type"),
+					values.get("transmition"));
+
+			if(makeExists == true) {
+				//if Make is true, powertrain is false
+				addMake(newMake_id, values.get("make"), values.get("model"), values.get("type"),
+						newPowerTrain_id, Integer.parseInt(values.get("year")));
+
+				addMakeHasPowertrain(newMake_id, newPowerTrain_id);
+
+				addListing(newListing_id,newMake_id,Integer.parseInt(values.get("mileage")),values.get("color"),
+						Double.parseDouble(values.get("price")),values.get("description"));
+			}
+
+		 }
+		 if(engineExists == false || powertrainExists == false) {
+		 	addPowertrainHasEngine(Integer.parseInt(values.get("powertrain_id")),
+					Integer.parseInt(values.get("engine_id")));
+		 }
+		 if(makeExists == false) {
+		 	//if make is false but powertrain is true
+		 	addMake(newMake_id,values.get("make"),values.get("model"),values.get("type"),
+					Integer.parseInt(values.get("powertrain_id")), Integer.parseInt(values.get("year")));
+
+		 	addMakeHasPowertrain(newMake_id,Integer.parseInt(values.get("powertrain_id")));
+
+		 	addListing(newListing_id,newMake_id,Integer.parseInt(values.get("mileage")),values.get("color"),
+					Double.parseDouble(values.get("price")),values.get("description"));
+		 }
 
 	 	//use fns: addListing, addengine, addmake, addpowertrain, addmakehaspowertrain, addpowertrainhasengine
-		addListing(Integer.parseInt(values.get("listing_id")),Integer.parseInt(values.get("make_id")),Integer.parseInt(values.get("mileage")),values.get("color"),Double.parseDouble(values.get("price")),values.get("description"));
 
 	 }
 	 
 	 // Search in make table by the make
 	 public void searchByMake(String make) throws Exception
 	 {
-		 String insertSql = "SELECT * FROM DEALERSHIP.make WHERE make LIKE " + make; 
+		 String insertSql = "SELECT * FROM DEALERSHIP.make WHERE model LIKE " + "'" + make +"'" ;
 	       			
 		 Statement statement = connection.createStatement();
 			
@@ -228,7 +324,7 @@ public class DataModel {
 	 //Search model 
 	 public void searchModel(String model) throws Exception
 	 {
-		 String insertSql = "SELECT * FROM DEALERSHIP.make WHERE model LIKE " + model; 
+		 String insertSql = "SELECT * FROM DEALERSHIP.make WHERE model LIKE " + "'" + model +"'" ;
 	       			
 		 Statement statement = connection.createStatement();
 			
@@ -266,9 +362,9 @@ public class DataModel {
 	 {
 	 
 	 
-	 String insertSql = "INSERT INTO DEALERSHIP.listing (listing_id, make_id, mileage, color, price, description) "
-    			+ "VALUES (' "+listing_id+"' , '"+make_id+"' , '"+mileage +"'" + color + "' , '" + price
-    			+ "' , '" + description + " )";
+		 String insertSql = "INSERT INTO DEALERSHIP.listing (listing_id, make_id, mileage, color, price, description) "
+		 			+ "VALUES ('"+listing_id+"' , '"+make_id+"' , '"+mileage +"' , '" + color + "' , '" + price
+		 			+ "' , '" + description +"')";
 	 
 
 	 Statement statement = connection.createStatement();
@@ -278,12 +374,12 @@ public class DataModel {
 	 
 	 } 
 	 
-	 public void addEngine(int engine_id, int size, String fuel_type, int cylinder) throws Exception
+	 public void addEngine(int engine_id, String size, String fuel_type, int cylinder) throws Exception
 	 {
 	 
 	 
-	 String insertSql = "INSERT INTO DEALERSHIP.engine (engine_id, size, fuel_type, cylinders) values "
-    			+ "VALUES (' " + engine_id + "' , '" + size + "' , '"  + fuel_type + "' , '"  + cylinder + "')";
+		 String insertSql = "INSERT INTO DEALERSHIP.engine (engine_id, size, fuel_type, cylinders) "
+				 + "VALUES ('"+engine_id+"' , '"+size+"' , '"+fuel_type +"' , '" + cylinder + "')";
 	 
     Statement statement = connection.createStatement();
     			
@@ -293,8 +389,7 @@ public class DataModel {
 	 public void addMake(int make_id, String make, String model, String type, int powertrain_id, int year) throws Exception
 	 {
 		 String insertSql = "INSERT INTO DEALERSHIP.make (make_id, make, model, type, powertrain_id, year) "
-	       			+ "VALUES (' "+make_id+"' , '"+make+"' , '"+model +"'" + type + "' , '" + powertrain_id
-	       			+ "' , '" + year + " )";
+				 + "VALUES ('"+make_id+"' , '"+make+"' , '"+model +"' , '" + type + "' , '" + powertrain_id + "' , '" + year + "')";
 		 Statement statement = connection.createStatement();
 			
 		    statement.execute(insertSql);
@@ -307,24 +402,22 @@ public class DataModel {
 	 public void addPowertrain(int powertrain_id, String drive_type, String transmition) throws Exception
 	 {
 		 
-		 String insertSql = "INSERT INTO DEALERSHIP.powertrain (powertrain_id, drive_type, transmition) values "
+		 String insertSql = "INSERT INTO DEALERSHIP.powertrain (powertrain_id, drive_type, transmition) "
 	       			+ "VALUES (' "+powertrain_id +"' , '"+drive_type +"' , '"+ transmition + "')";
 		 
 		 Statement statement = connection.createStatement();
 			
 		   statement.execute(insertSql);
 		 
-		 
-		 
-		 
+	
 	 }
 	 
 	 public void addMakeHasPowertrain (int make_id, int powertrain_id) throws Exception {
 		 
 		 
 		 
-		 String insertSql = "INSERT INTO DEALERSHIP.MakeHasPowertrain (make_id, powertrain_id) values "
-	       			+ "VALUES (' "+make_id +"' , '"+powertrain_id + "')";
+		 String insertSql = "INSERT INTO DEALERSHIP.MakeHasPowertrain (make_id, powertrain_id) "
+	       			+ "VALUES (' "+make_id +"' , '"+powertrain_id +  "')";
 		 
 		 Statement statement = connection.createStatement();
 			
@@ -335,12 +428,14 @@ public class DataModel {
 	 public void addPowertrainHasEngine(int powertrain_id, int engine_id) throws Exception
 	 
 	 {
-		 String insertSql = "INSERT INTO DEALERSHIP.PowertrainHasEngine ((powertrain_id, engine_id) values "
-	       			+ "VALUES (' "+powertrain_id +"' , '"+engine_id + "')";
+		 String insertSql = "INSERT INTO DEALERSHIP.PowertrainHasEngine (powertrain_id, engine_id) "
+	       			+ "VALUES (' "+powertrain_id +"' , '"+ engine_id +  "')";
+	 
 		 Statement statement = connection.createStatement();
 			
 		   statement.execute(insertSql);
 	 }
+	 
 	 
 	 
 	 public void sortvehicle(String orderby, String ascOrDesc) throws Exception
