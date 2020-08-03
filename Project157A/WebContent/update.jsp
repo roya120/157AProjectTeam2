@@ -27,11 +27,16 @@
 <body class="body">		
 		<div class="content">
 			  
-			<h1>Sell a Car</h1>
+			<h1>Update Listing</h1>
 				<br>
-			  <form action="listCreation.jsp" >
+			  <form action="listingUpdate.jsp" >
 			  
 			   <table style="with: 80%">
+			   
+			    <tr>
+			     <td>Listing ID</td>
+			     <td><input type="text" name="listingID" /></td>
+			    </tr>
 			    <tr>
 			     <td>Make</td>
 			     <td><input type="text" name="make" /></td>
@@ -65,29 +70,6 @@
 			     <td><input type="text" name="type" /></td>
 			    </tr>
 			     <tr>
-			    
-			     <td><br>Optional<br><br></td>
-			    </tr>	
-			    <tr>
-			     <td>Drive Type</td>
-			     <td><input type="text" name="driveType" /></td>
-			    </tr>
-			    <tr>
-			     <td>Transmission</td>
-			     <td><input type="text" name="transmission" /></td>
-			    </tr>
-			    <tr>
-			     <td>Fuel Type</td>
-			     <td><input type="text" name="fuelType" /></td>
-			    </tr>
-			    <tr>
-			     <td>EngineSize</td>
-			     <td><input type="text" name="engineSize" /></td>
-			    </tr>
-			    <tr>
-			     <td>Cylinders</td>
-			     <td><input type="text" name="cylinders" /></td>
-			    </tr>
 			   </table>
 			   <input type="submit" value="Submit" />
 			  </form>

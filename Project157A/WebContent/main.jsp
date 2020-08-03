@@ -16,7 +16,7 @@
 	        <ul class="navbar-nav mr-auto">
 	        
 	            <li class="nav-item ">
-	                <a class="nav-link" href="main.jsp">Shop Cars</a>
+	                <a class="nav-link" href="shopCar.jsp">Shop Cars</a>
 	            </li>
 	            <li class="nav-item ">
 	                <a class="nav-link" href="sell.jsp">Sell</a>
@@ -36,8 +36,8 @@
 	    <div class="mx-auto order-0">
 	        <ul class="navbar-nav mr-auto">
 	        
-	            <li class="nav-item active">
-	                <a class="nav-link" href="main.jsp">CarMart</a>
+	            <li class="nav-item active" >
+	                <a class="nav-link" href="local.jsp" style="font-size:25px;" >CarMart</a>
 	            </li>
 	            
 	        </ul>
@@ -45,10 +45,10 @@
 	    <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
 	        <ul class="navbar-nav ml-auto">
 	            <li class="nav-item">
-	                <a class="nav-link" href="#">Register</a>
+	                <a class="nav-link" href="register.jsp">Register</a>
 	            </li>
 	            <li class="nav-item">
-	                <a class="nav-link" href="#">Login</a>
+	                <a class="nav-link" href="login.jsp">Login</a>
 	            </li>
 	        </ul>
 	    </div>
@@ -64,46 +64,63 @@
 			/* Style the side navigation */
 			.sidenav {
 			  height: 100%;
-			  width: 280px;
+			  width: 300px;
 			  position: fixed;
 			  z-index: 1;
-			  top: 65;
-			  left: 0;
+			  top: 0;
+			  left: 15;
 			  overflow-x: hidden;
 			  border-right-style: solid;
 			  border-color: gray;
 			  border-right-width: 1px;
+			  background-color: white;
+			  background: rgba(255, 255, 255, 0.5)
+			}
+			
+			.body {
+			  margin-left: 280px;
+			  padding-left: 20px;
+			  background: url(https://image.shutterstock.com/image-photo/blurred-abstract-dealership-store-defocused-260nw-1486381349.jpg);
+			  background-repeat: no-repeat;
+  			  background-size: 1400px 1000px;
+  			  background-attachment: fixed;
 			}
 			
 			.sidenavSearch {
 			  height: 140px;
 			  background-color: #F5F5F5;
-
+			  padding-left: 10px;
+			  padding-top: 10px;
 			}
 			
 			.bottomLine{
 			 border-bottom-style: dashed;
 			  border-color: grey;
 			  border-right-width: 1px;
+			  padding-left: 10px;
 			}
 			
 			.label{
 			 font-weight:bold;
+			 padding-left: 10px;
 			}
 			
 			.sidenavPrice {
 			  height: 70px;
 			  background-color: #F5F5F5;
+			  padding-left: 10px;
 			}
 			
 			.sidenavYear {
 			  height: 70px;
-			  background-color: #F5F5F5;;
+			  background-color: #F5F5F5;
+			  padding-left: 10px;
 			}
 			
 			.sidenavDrive {
 			  height: 70px;
-			  background-color: #F5F5F5;;
+			  background-color: #F5F5F5;
+			  padding-left: 10px;
 			}
 			
 			/* Style the content */
@@ -114,9 +131,10 @@
 			</style>
 			
 			</head>
-			<body>
-			
+			<body class="body">
+			<br>
 			<div class="sidenav">
+			
 			<form action="displaySearch.jsp" >	
 				<div class="sidenavSearch">
 					
@@ -126,7 +144,7 @@
 							Make:
 							<br> 
 					  		<select name="make" id="make" onchange="populate(this.id,'model');" style="width: 180px;" >
-					  	 	<option value="">SELECT</option> 
+					  	 	<option value=""></option> 
 							    <% for(String x : AllMakeModel.getMake()){ 
 							        String party= x; %> 
 							        <option value="<%=party%>" > <%=party%> 
@@ -134,28 +152,11 @@
 							    <%}%> 
 							</select>
 						</div>
-						
-							<script>
-							
-								function populate(make,model){
-									
-									var mymake = document.getElementById(make);
-									var mymodel = document.getElementById(model);
-									
-									s2.innerHTML = "";
-									
-									if
-									
-								}
-							
-							</script> 
 							
 						<div>
 							Model:
 							<br> 
-					  		<select name="model" id="model" style="width: 180px;">
-					  	 		<option></option>
-							</select>
+					  		<input type="text" name="model" />
 						</div>
 						<br>
 						<input class="btn btn-primary" type="submit" value="Search"/>
@@ -200,7 +201,7 @@
 					  		<select name="fromYear" style="width: 85px;">
 					  	 	
 					  	 		<option value="">SELECT</option> 
-							    <% for(int i=1990;i<java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);i++){ 
+							    <% for(int i=1990;i<=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);i++){ 
 							        int party= i; %> 
 							        <option value="<%=party%>" > <%=party%> 
 							        </option>
@@ -211,7 +212,7 @@
 							 
 					  		<select name="toYear" style="width: 85px;">
 					  	 	<option value="">SELECT</option> 
-							    <% for(int i=1990;i<java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);i++){ 
+							    <% for(int i=1990;i<=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);i++){ 
 							        int party= i; %> 
 							        <option value="<%=party%>" > <%=party%> 
 							        </option>
@@ -237,10 +238,10 @@
 						<br> 
 					  	<select name="driveType" style="width: 180px;">
 					  	<option></option>
-					  	<option>Front Wheel Drive</option>
-					  	<option>Rear Wheel Drive</option>
-					  	<option>All Wheel Drive</option>
-					  	<option>Four Wheel Drive</option>
+					  	<option>fwd</option>
+					  	<option>rwd</option>
+					  	<option>awl</option>
+					  	<option>4wd</option>
 						</select>
 				</div>
 				<br>
@@ -286,9 +287,9 @@
 				<br>
 				
 				<div class="sidenavDrive">
-						<label class="label">Size:</label>
+						<label class="label">Engine Size:</label>
 						<br> 
-					  	<select name="cylinderSize" style="width: 180px;">
+					  	<select name="engineSize" style="width: 180px;">
 					  	<option></option>
 					  	<option>2.0 L</option>
 					  	<option>3.0 L</option>
@@ -300,11 +301,7 @@
 				<br><br><br>
 				</form>
 			</div>
-			
-			<div class="content">
-			  <h2>CSS Template</h2>
-			  <p>A full-height, fixed sidenav and content.</p>
-			</div>
+
 			
 			</body>
 
